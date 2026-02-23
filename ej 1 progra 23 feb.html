@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Calculadora JS</title>
+
+<script>
+function sumar() {
+    let num1 = parseFloat(document.calculadora.valor1.value);
+    let num2 = parseFloat(document.calculadora.valor2.value);
+    document.calculadora.resultado.value = num1 + num2;
+}
+
+function restar() {
+    let num1 = parseFloat(document.calculadora.valor1.value);
+    let num2 = parseFloat(document.calculadora.valor2.value);
+    document.calculadora.resultado.value = num1 - num2;
+}
+
+function multiplicar() {
+    let num1 = parseFloat(document.calculadora.valor1.value);
+    let num2 = parseFloat(document.calculadora.valor2.value);
+    document.calculadora.resultado.value = num1 * num2;
+}
+
+function dividir() {
+    let num1 = parseFloat(document.calculadora.valor1.value);
+    let num2 = parseFloat(document.calculadora.valor2.value);
+
+    if (num2 === 0) {
+        alert("No se puede dividir entre cero");
+        return;
+    }
+
+    document.calculadora.resultado.value = num1 / num2;
+}
+</script>
+
+</head>
+
+<body>
+
+<h2>Calculadora Básica</h2>
+
+<form name="calculadora">
+Primer número: <input type="text" name="valor1"><br><br>
+Segundo número: <input type="text" name="valor2"><br><br>
+
+<input type="button" value="Sumar" onclick="sumar()">
+<input type="button" value="Restar" onclick="restar()">
+<input type="button" value="Multiplicar" onclick="multiplicar()">
+<input type="button" value="Dividir" onclick="dividir()"><br><br>
+
+Resultado: <input type="text" name="resultado">
+</form>
+
+</body>
+</html>
