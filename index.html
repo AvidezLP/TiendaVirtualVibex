@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vibex | Cuenta</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+<div class="card">
+
+  <img src="img/logovibex.png" class="logo" alt="Vibex Logo">
+
+  <div class="subtitle">Acceso con correo y contraseña</div>
+
+  <div class="tabs">
+    <button class="tab active" id="tabLogin" type="button">Ingresar</button>
+    <button class="tab" id="tabRegister" type="button">Registrarme</button>
+  </div>
+
+  <div id="message" class="message"></div>
+
+  <!-- LOGIN -->
+  <form id="formLogin">
+    <div class="input-group">
+      <label for="loginEmail">Correo</label>
+      <input type="email" id="loginEmail" placeholder="ejemplo@correo.com" required>
+    </div>
+
+    <div class="input-group">
+      <label for="loginPass">Contraseña</label>
+      <input type="password" id="loginPass" placeholder="Mínimo 6 caracteres" required minlength="6">
+    </div>
+
+    <button class="btn" type="submit">Ingresar</button>
+  </form>
+
+  <!-- REGISTER -->
+  <form id="formRegister" class="hidden">
+    <div class="input-group">
+      <label for="regName">Nombre completo *</label>
+      <input type="text" id="regName" placeholder="Ej: David Limachi" required>
+    </div>
+
+    <div class="input-group">
+      <label for="regEmail">Correo</label>
+      <input type="email" id="regEmail" placeholder="ejemplo@correo.com" required>
+    </div>
+
+    <div class="input-group">
+      <label for="regPass">Contraseña</label>
+      <input type="password" id="regPass" placeholder="Mínimo 6 caracteres" required minlength="6">
+      <small class="password-hint">Debe tener al menos 6 caracteres</small>
+    </div>
+
+    <button class="btn" type="submit">Crear cuenta</button>
+  </form>
+
+</div>
+
+<script>
+  const tabLogin = document.getElementById("tabLogin");
+  const tabRegister = document.getElementById("tabRegister");
+  const formLogin = document.getElementById("formLogin");
+  const formRegister = document.getElementById("formRegister");
+  const message = document.getElementById("message");
+
+  function showMessage(text, type){
+    message.className = "message " + (type || "");
+    message.textContent = text;
+    message.style.display = "block";
+  }
+
+  function hideMessage(){
+    message.style.display = "none";
+    message.textContent = "";
+    message.className = "message";
+  }
+
+  tabLogin.addEventListener("click", () => {
+    tabLogin.classList.add("active");
+    tabRegister.classList.remove("active");
+    formLogin.classList.remove("hidden");
+    formRegister.classList.add("hidden");
+    hideMessage();
+  });
+
+  tabRegister.addEventListener("click", () => {
+    tabRegister.classList.add("active");
+    tabLogin.classList.remove("active");
+    formRegister.classList.remove("hidden");
+    formLogin.classList.add("hidden");
+    hideMessage();
+  });
+
+  // ===== LOGIN =====
+  formLogin.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    hideMessage();
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = document.getElementById("loginPass").value;
+
+    try{
+      const res = await fetch("api/login.php", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json().catch(() => ({ ok:false, error:"Respuesta inválida del servidor" }));
+
+      if(!res.ok || !data.ok){
+        showMessage(data.error || "Error al iniciar sesión", "error");
+        return;
+      }
+
+      showMessage("✅ Inicio de sesión exitoso", "success");
+      setTimeout(() => window.location.href = "tienda.php", 500);
+    }catch(err){
+      showMessage("❌ Error de conexión. Revisa Apache/MySQL en XAMPP.", "error");
+    }
+  });
+
+  // ===== REGISTER =====
+  formRegister.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    hideMessage();
+
+    const full_name = document.getElementById("regName").value.trim();
+    const email = document.getElementById("regEmail").value.trim();
+    const password = document.getElementById("regPass").value;
+
+    if(!full_name){
+      showMessage("⚠️ El nombre completo es obligatorio.", "error");
+      return;
+    }
+
+    try{
+      const res = await fetch("api/register.php", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ full_name, email, password })
+      });
+
+      const data = await res.json().catch(() => ({ ok:false, error:"Respuesta inválida del servidor" }));
+
+      if(!res.ok || !data.ok){
+        showMessage(data.error || "Error al registrarse", "error");
+        return;
+      }
+
+      showMessage("✅ Registro exitoso. Ahora inicia sesión.", "success");
+
+      // Cambiar a login y precargar correo
+      tabLogin.click();
+      document.getElementById("loginEmail").value = email;
+      document.getElementById("loginPass").value = "";
+      formRegister.reset();
+
+    }catch(err){
+      showMessage("❌ Error de conexión. Revisa Apache/MySQL en XAMPP.", "error");
+    }
+  });
+
+  // ===== Indicador de fuerza de contraseña (solo visual) =====
+  const passInput = document.getElementById("regPass");
+  passInput.addEventListener("input", () => {
+    const v = passInput.value;
+
+    if(v.length < 6){
+      passInput.style.borderColor = "#dc2626";
+    }else if(v.length < 10){
+      passInput.style.borderColor = "#f59e0b";
+    }else{
+      passInput.style.borderColor = "#16a34a";
+    }
+  });
+</script>
+
+</body>
+</html>
