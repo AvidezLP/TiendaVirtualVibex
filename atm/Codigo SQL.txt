@@ -1,0 +1,30 @@
+-- CREAR BASE DE DATOS
+CREATE DATABASE atm;
+USE atm;
+
+-- =========================
+-- TABLA USUARIOS
+-- =========================
+CREATE TABLE usuarios (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  tarjeta VARCHAR(20) UNIQUE,
+  pin VARCHAR(10),
+  saldo DECIMAL(10,2) DEFAULT 0
+);
+
+-- DATOS DE PRUEBA
+INSERT INTO usuarios (tarjeta, pin, saldo) VALUES
+('123456000000', '1234', 1000.00),
+('111122223333', '4321', 500.00);
+
+-- =========================
+-- TABLA MOVIMIENTOS
+-- =========================
+CREATE TABLE movimientos (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  tarjeta VARCHAR(20),
+  tipo VARCHAR(20),
+  monto DECIMAL(10,2),
+  detalle VARCHAR(100),
+  fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

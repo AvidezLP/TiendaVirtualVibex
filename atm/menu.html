@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>ATM</title>
+  <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+
+<div class="contenedor">
+
+  <div class="pantalla" id="despedida">
+  <h1>Gracias por usar BanCori</h1>
+  <h2>💳 Retire su tarjeta</h2>
+  <p>Redirigiendo...</p>
+</div>
+
+  <!-- MENÚ -->
+  <div class="pantalla activa" id="menu">
+    <h1>Menú Principal</h1>
+    <div class="grid">
+      <button onclick="mostrar('retiro')">Retiro</button>
+      <button onclick="mostrar('saldo'); verSaldo();">Saldo</button>
+      <button onclick="mostrar('deposito')">Depósito</button>
+      <button onclick="mostrar('transferencia')">Transferencia</button>
+      <!-- 🔥 IMPORTANTE: ahora llama a verEstado -->
+      <button onclick="mostrar('estado'); verEstado();">Estado de cuenta</button>
+      <button class="logout" onclick="cerrarSesion()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <!-- RETIRO -->
+  <div class="pantalla" id="retiro">
+    <h1>Retiro</h1>
+
+    <div class="grid">
+      <button onclick="retirar(10)">Bs 10</button>
+      <button onclick="retirar(50)">Bs 50</button>
+      <button onclick="retirar(100)">Bs 100</button>
+      <button onclick="retirar(200)">Bs 200</button>
+      <button onclick="retirar(500)">Bs 500</button>
+      <button onclick="mostrar('montoPersonal')">Ingresar monto</button>
+      <button onclick="volver()">Volver</button>
+    </div>
+  </div>
+
+  <!-- SALDO -->
+  <div class="pantalla" id="saldo">
+    <h1>Saldo</h1>
+    <h2 id="saldoTexto"></h2>
+    <button onclick="volver()">Volver</button>
+  </div>
+
+  <!-- DEPÓSITO -->
+  <div class="pantalla" id="deposito">
+    <h1>Depósito</h1>
+    <input type="number" id="montoDep" placeholder="Monto">
+    <button onclick="depositar()">Confirmar</button>
+    <button onclick="volver()">Volver</button>
+  </div>
+
+  <!-- TRANSFERENCIA -->
+  <div class="pantalla" id="transferencia">
+    <h1>Transferencia</h1>
+    <input type="text" id="destino" placeholder="Cuenta destino">
+    <input type="number" id="montoTrans" placeholder="Monto">
+    <button onclick="transferir()">Enviar</button>
+    <button onclick="volver()">Volver</button>
+  </div>
+
+  <!-- ESTADO DE CUENTA -->
+  <div class="pantalla" id="estado">
+    <h1>Estado de cuenta</h1>
+    <div id="estadoTexto"></div>
+  </div>
+
+  <!-- INGRESAR MONTO PERSONAL -->
+  <div class="pantalla" id="montoPersonal">
+    <h1>Ingresar monto</h1>
+
+    <input type="text" id="montoRetiro" placeholder="Monto en Bs">
+
+    <button onclick="confirmarRetiro()">Confirmar</button>
+    <button onclick="mostrar('retiro')">Volver</button>
+  </div>
+
+</div>
+
+<!-- TECLADO ATM -->
+<div class="teclado">
+
+  <!-- FILA 1 -->
+  <button class="n7" data-key="7" onclick="presionar('7')">7</button>
+  <button class="n8" data-key="8" onclick="presionar('8')">8</button>
+  <button class="n9" data-key="9" onclick="presionar('9')">9</button>
+  <button class="cambiar" data-key="cambiar" onclick="cambiarCampo()">CAMBIAR</button>
+
+  <!-- FILA 2 -->
+  <button class="n4" data-key="4" onclick="presionar('4')">4</button>
+  <button class="n5" data-key="5" onclick="presionar('5')">5</button>
+  <button class="n6" data-key="6" onclick="presionar('6')">6</button>
+  <button class="enter" data-key="enter" onclick="accionEnter()">ENTER</button>
+
+  <!-- FILA 3 -->
+  <button class="n1" data-key="1" onclick="presionar('1')">1</button>
+  <button class="n2" data-key="2" onclick="presionar('2')">2</button>
+  <button class="n3" data-key="3" onclick="presionar('3')">3</button>
+
+  <!-- FILA 4 -->
+  <button class="cero" data-key="0" onclick="presionar('0')">0</button>
+  <button class="del" data-key="del" onclick="borrar()">DEL</button>
+
+</div>
+
+<script src="menu.js"></script>
+
+<div id="modalRecibo" class="modal-recibo">
+
+  <div class="recibo-box">
+
+    <div id="contenidoRecibo"></div>
+
+    <div class="acciones-recibo">
+      <button onclick="confirmarImpresion(true)">Imprimir</button>
+      <button onclick="confirmarImpresion(false)">Cancelar</button>
+    </div>
+
+  </div>
+
+</div>
+</body>
+</html>
